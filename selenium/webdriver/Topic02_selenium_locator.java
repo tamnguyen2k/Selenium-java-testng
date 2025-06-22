@@ -3,7 +3,9 @@ package webdriver;
 import org.bouncycastle.jce.exception.ExtCertPathBuilderException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.locators.RelativeLocator;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -18,6 +20,11 @@ public class Topic02_selenium_locator {
         driver = new FirefoxDriver();
         driver.get("https://demo.nopcommerce.com/register");
     }
+    // Duy nhất
+    // Ưu tiên nếu có id/class/name thì dùng trước
+    // k có id/class/name: dùng bất kì 11 attribute khác
+    // Giá trị của attribute phải có ý nghĩa liên quan tới element đó
+    // Tối ưu nhất để dùng
 
     @Test
     public void TC_01_ID() throws InterruptedException {
@@ -83,8 +90,26 @@ public class Topic02_selenium_locator {
         driver.findElement(By.xpath("//input[@id='Company']"));
         driver.findElement(By.xpath("//button[@class='button-1 register-next-step-button']"));
     }
+    @Test
+    // Khi k thể định danh được element của chính nó ( phải dựa vào vị trí bên cạnh)
+    //Hoặc để test GUI theo design
+    public void TC_09_Relative_Locator() {
+        driver.get("https://demo.nopcommerce.com/login");
+        // Element / By A
+        By passwordTextboxBy = By.cssSelector("input#Password");
+        WebElement passwordTexybox = driver.findElement(By.cssSelector("input#Password"));
+        // Element / By B
+        By rememberMecheckboxBy = By.id("RememberMe");
+        // Element / By C
+        By forgotPasswordLinkBy = By.cssSelector("span.forgot-password");
+        // Element / By D
+        By loginButtonBy = By.cssSelector("button.login-button");
+        // Element / By E
+        WebElement rememberMelabelText = driver.findElement(RelativeLocator.with(By.tagName("label")).above(loginButtonBy)); // label đang nằm trên login button
+        }
     @AfterClass
     public void cleanBrowser() {
         driver.quit();
     }
+
 }
